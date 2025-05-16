@@ -1,0 +1,37 @@
+# Ignore environment and secret files
+*.env
+*.pem
+*.json
+*.key
+userlist.txt   # User credentials (do not commit)
+
+# Ignore database and log files
+data/media_store/
+*.db*
+*.log.config
+
+# Ignore macOS system files
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Ignore editor and OS-specific files
+*.swp
+*.swo
+*~
+.vscode/
+.idea/
+
+# Ignore shell history
+.bash_history
+.zsh_history
+
+# Ignore backup files
+*.bak
+*.tmp
+
+# Add more as needed...
+easy-rsa-vpn/
+userlist.txt
+config.yml
+homeserver.yaml
