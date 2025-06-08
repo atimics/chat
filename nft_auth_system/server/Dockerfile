@@ -18,8 +18,8 @@ COPY package.json package-lock.json* ./
 # Install dependencies
 RUN npm ci --only=production && npm cache clean --force
 
-# Copy application code
-COPY . .
+# Copy only the application code (not node_modules)
+COPY auth-service.js ./
 
 # Create data directory
 RUN mkdir -p /app/data

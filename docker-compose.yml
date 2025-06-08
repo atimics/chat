@@ -42,31 +42,6 @@ services:
       retries: 3
       start_period: 5s
 
-  webclient:
-    build:
-      context: ./app_main
-      dockerfile: Dockerfile
-    container_name: chatimics-webclient
-    ports:
-      - "3000:3000"
-      - "3001:3001"
-    environment:
-      - PORT=3000
-      - MATRIX_SERVER_URL=https://chat.ratimics.com
-      - NODE_ENV=production
-      - NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID=${NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID}
-      - NEXT_PUBLIC_NFT_AUTH_API_URL=http://localhost:3002
-      - NEXT_PUBLIC_MATRIX_SERVER_URL=https://chat.ratimics.com
-      - NEXT_PUBLIC_SOLANA_RPC_URL=${SOLANA_RPC_URL}
-      - NEYNAR_API_KEY=${NEYNAR_API_KEY}
-      - JWT_SECRET=${JWT_SECRET}
-    volumes:
-      - ./app_main/server/userlist.txt:/app/server/userlist.txt:ro
-    restart: unless-stopped
-    depends_on:
-      - synapse
-      - nft-auth
-
   cloudflared:
     image: cloudflare/cloudflared:latest
     container_name: cloudflared
@@ -76,4 +51,3 @@ services:
     restart: unless-stopped
     depends_on:
       - synapse
-      - webclient
