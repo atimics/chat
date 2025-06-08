@@ -1,0 +1,8 @@
+tunnel: c0085cf9-60ee-4fc0-ae74-0840dcf413d2
+credentials-file: /etc/cloudflared/c0085cf9-60ee-4fc0-ae74-0840dcf413d2.json
+protocol: http2
+
+ingress:
+  - hostname: chat.ratimics.com
+    service: http://synapse:8008
+  - service: http_status:404

@@ -1,4 +1,3 @@
-version: "3"
 services:
   synapse:
     image: matrixdotorg/synapse:latest
@@ -10,15 +9,71 @@ services:
       - SYNAPSE_SERVER_NAME=chat.ratimics.com
       - SYNAPSE_REPORT_STATS=yes
     volumes:
-      - ./data:/data
+      - ./synapse_server/data:/data
     restart: unless-stopped
+
+  # NFT Authentication Service
+  nft-auth:
+    build:
+      context: ./nft_auth_system/server
+      dockerfile: Dockerfile
+    container_name: nft-auth-service
+    ports:
+      - "3002:3002"
+    environment:
+      - NODE_ENV=production
+      - NFT_AUTH_PORT=3002
+      - SOLANA_RPC_URL=${SOLANA_RPC_URL}
+      - HELIUS_API_KEY=${HELIUS_API_KEY}
+      - AUTHORIZED_NFT_CREATORS=${AUTHORIZED_NFT_CREATORS}
+      - MATRIX_SERVER_URL=http://synapse:8008
+      - SYNAPSE_ADMIN_TOKEN=${SYNAPSE_ADMIN_TOKEN}
+      - MAIN_ROOM_ID=${MAIN_ROOM_ID}
+      - NFT_AUTH_DB_PATH=/app/data/nft_registrations.db
+    volumes:
+      - ./nft_auth_system/data:/app/data
+    restart: unless-stopped
+    depends_on:
+      - synapse
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3002/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 5s
+
+  webclient:
+    build:
+      context: ./app_main
+      dockerfile: Dockerfile
+    container_name: chatimics-webclient
+    ports:
+      - "3000:3000"
+      - "3001:3001"
+    environment:
+      - PORT=3000
+      - MATRIX_SERVER_URL=https://chat.ratimics.com
+      - NODE_ENV=production
+      - NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID=${NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID}
+      - NEXT_PUBLIC_NFT_AUTH_API_URL=http://localhost:3002
+      - NEXT_PUBLIC_MATRIX_SERVER_URL=https://chat.ratimics.com
+      - NEXT_PUBLIC_SOLANA_RPC_URL=${SOLANA_RPC_URL}
+      - NEYNAR_API_KEY=${NEYNAR_API_KEY}
+      - JWT_SECRET=${JWT_SECRET}
+    volumes:
+      - ./app_main/server/userlist.txt:/app/server/userlist.txt:ro
+    restart: unless-stopped
+    depends_on:
+      - synapse
+      - nft-auth
 
   cloudflared:
     image: cloudflare/cloudflared:latest
     container_name: cloudflared
     volumes:
-      - ./.cloudflared:/etc/cloudflared:ro
+      - ./configuration_examples/.cloudflared:/etc/cloudflared:ro
     command: tunnel --config /etc/cloudflared/config.yml run
     restart: unless-stopped
     depends_on:
       - synapse
+      - webclient

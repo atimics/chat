@@ -1,0 +1,25 @@
+# Text files
+*.md text
+*.txt text
+*.yml text
+*.yaml text
+*.json text
+*.js text
+*.ts text
+*.tsx text
+*.css text
+*.sh text
+
+# Binary files
+*.db binary
+*.key binary
+*.pem binary
+*.p12 binary
+*.pfx binary
+
+# Docker files
+Dockerfile text
+docker-compose.yml text
+
+# Ensure shell scripts have LF line endings
+*.sh text eol=lf

@@ -1,0 +1,51 @@
+# Sample User List for Chatimics Matrix Server
+# This file contains example user data for bulk registration and testing
+# Format: username password admin_flag (space-separated)
+# 
+# Fields:
+# - username: Matrix username (without @ or domain suffix)
+# - password: User password (use strong passwords in production!)
+# - admin_flag: true/false (whether user has server admin privileges)
+#
+# Example entries:
+
+# System administrators (admin_flag = true)
+admin AdminP@ssw0rd123 true
+moderator ModeratorP@ss456 false
+
+# Demo users for testing (admin_flag = false)
+alice AlicePass789 false
+bob BobSecure321 false
+charlie CharlieKey654 false
+
+# Test accounts for development
+testuser1 TestPass111 false
+testuser2 TestPass222 false
+demo DemoPassword false
+
+# Bot accounts (optional - uncomment to use)
+# chatbot BotPassword999 false
+# announcer AnnouncePass888 false
+
+# Sample business users
+# john.doe JohnSecure2024 false
+# jane.smith JaneP@ssw0rd2024 false
+# team.lead TeamLeaderPass false
+
+# Notes:
+# - Remove or comment out (with #) any users you don't want to create
+# - Change ALL passwords before using in production
+# - Usernames should be lowercase, no spaces, alphanumeric plus dots/underscores
+# - Admin users can manage the server, create rooms, and moderate all content
+# - Regular users can only access standard chat features
+# - Passwords should be complex (8+ chars, mixed case, numbers, symbols)
+#
+# To use this file:
+# 1. Copy it to userlist.txt in the project root
+# 2. Modify usernames, passwords, and admin flags as needed
+# 3. Run: ./bulk_register.sh
+#
+# Security Warning:
+# This file contains plaintext passwords - never commit the actual userlist.txt to git!
+# Only this example template should be in version control.
+# The actual userlist.txt is excluded by .gitignore for security.

@@ -1,0 +1,2 @@
+ratichat    BlueDragon%888  false
+ratimics    BlueDragon%888  true

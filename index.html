@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatimics - Matrix Web Client</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .glass-effect {
+            backdrop-filter: blur(16px);
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .crypto-card {
+            transition: all 0.3s ease;
+        }
+        .crypto-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body class="gradient-bg min-h-screen">
+    <div class="container mx-auto px-4 py-8">
+        <!-- Header -->
+        <header class="text-center mb-12">
+            <h1 class="text-5xl font-bold text-white mb-4">
+                <i class="fas fa-comments mr-3"></i>Chatimics
+            </h1>
+            <p class="text-xl text-gray-200">Secure Matrix Chat with Crypto Authentication</p>
+        </header>
+
+        <!-- Main Content -->
+        <div class="max-w-4xl mx-auto">
+            <!-- Auth Section -->
+            <div id="auth-section" class="glass-effect rounded-2xl p-8 mb-8">
+                <div class="text-center mb-8">
+                    <h2 class="text-3xl font-bold text-white mb-4">Connect Your Wallet</h2>
+                    <p class="text-gray-200">Authenticate with your crypto wallet to access the chat</p>
+                </div>
+
+                <!-- Wallet Connection -->
+                <div class="grid md:grid-cols-3 gap-6 mb-8">
+                    <div class="crypto-card glass-effect rounded-xl p-6 text-center cursor-pointer" onclick="connectWallet('metamask')">
+                        <i class="fab fa-ethereum text-4xl text-blue-400 mb-4"></i>
+                        <h3 class="text-xl font-semibold text-white mb-2">MetaMask</h3>
+                        <p class="text-gray-300">Connect with MetaMask</p>
+                    </div>
+                    <div class="crypto-card glass-effect rounded-xl p-6 text-center cursor-pointer" onclick="connectWallet('walletconnect')">
+                        <i class="fas fa-wallet text-4xl text-purple-400 mb-4"></i>
+                        <h3 class="text-xl font-semibold text-white mb-2">WalletConnect</h3>
+                        <p class="text-gray-300">Connect with WalletConnect</p>
+                    </div>
+                    <div class="crypto-card glass-effect rounded-xl p-6 text-center cursor-pointer" onclick="connectWallet('coinbase')">
+                        <i class="fas fa-coins text-4xl text-orange-400 mb-4"></i>
+                        <h3 class="text-xl font-semibold text-white mb-2">Coinbase</h3>
+                        <p class="text-gray-300">Connect with Coinbase</p>
+                    </div>
+                </div>
+
+                <!-- Wallet Status -->
+                <div id="wallet-status" class="hidden">
+                    <div class="bg-green-500 bg-opacity-20 border border-green-500 rounded-lg p-4 mb-6">
+                        <div class="flex items-center">
+                            <i class="fas fa-check-circle text-green-400 mr-3"></i>
+                            <div>
+                                <p class="text-white font-semibold">Wallet Connected</p>
+                                <p class="text-gray-300 text-sm" id="wallet-address"></p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Sign Message -->
+                    <div class="text-center">
+                        <button id="sign-btn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-lg transition-colors duration-200">
+                            <i class="fas fa-signature mr-2"></i>Sign Authentication Message
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Matrix Client Section -->
+            <div id="matrix-client" class="hidden glass-effect rounded-2xl p-8">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-3xl font-bold text-white">Matrix Chat</h2>
+                    <div class="flex items-center space-x-4">
+                        <span class="text-gray-300" id="user-info"></span>
+                        <button id="logout-btn" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg">
+                            <i class="fas fa-sign-out-alt mr-2"></i>Logout
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Chat Interface -->
+                <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+                    <!-- Room List -->
+                    <div class="lg:col-span-1">
+                        <div class="glass-effect rounded-xl p-4 h-96 overflow-y-auto">
+                            <h3 class="text-lg font-semibold text-white mb-4">Rooms</h3>
+                            <div id="room-list" class="space-y-2">
+                                <!-- Rooms will be populated here -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Chat Area -->
+                    <div class="lg:col-span-3">
+                        <div class="glass-effect rounded-xl p-4 h-96 flex flex-col">
+                            <div class="flex-1 overflow-y-auto mb-4" id="chat-messages">
+                                <div class="text-center text-gray-400 py-8">
+                                    <i class="fas fa-comments text-4xl mb-4"></i>
+                                    <p>Select a room to start chatting</p>
+                                </div>
+                            </div>
+                            <div class="flex space-x-2">
+                                <input type="text" id="message-input" placeholder="Type your message..." 
+                                       class="flex-1 bg-white bg-opacity-10 border border-gray-300 border-opacity-30 rounded-lg px-4 py-2 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <button id="send-btn" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg">
+                                    <i class="fas fa-paper-plane"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/matrix-js-sdk@latest/dist/browser-matrix.min.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

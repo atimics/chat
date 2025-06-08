@@ -1,0 +1,10 @@
+# Ignore dependencies and build artifacts
+node_modules
+.next
+
+# Ignore environment and git files
+.env*
+.git
+
+# Ignore extraneous Dockerfiles
+Dockerfile.webclient

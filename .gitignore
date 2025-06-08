@@ -1,37 +1,223 @@
-# Ignore environment and secret files
-*.env
+# =============================================================================
+# CHATIMICS PROJECT - OPTIMIZED .gitignore
+# =============================================================================
+
+# Node.js Dependencies & Build Output
+# =============================================================================
+node_modules/
+.next/
+.turbo/
+build/
+dist/
+out/
+coverage/
+
+# Package Manager Files
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+.yarn-integrity
+.pnp.*
+
+# Environment Variables & Secrets
+# =============================================================================
+# Keep all environment variables out of version control
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env.*.local
+
+# Matrix Synapse Server Data
+# =============================================================================
+# Ignore ALL live server data - databases, keys, logs, media
+synapse_server/data/
+!synapse_server/data/homeserver.yaml.template
+!synapse_server/data/log.config.template
+
+# Cloudflare Tunnel Credentials
+# =============================================================================
+# Keep tunnel configs but ignore actual credentials and certificates
+synapse_server/cloudflare_config/*.json
+!synapse_server/cloudflare_config/example_credentials.json
+synapse_server/cloudflare_config/cert.pem
+.cloudflared/
 *.pem
-*.json
+
+# VPN & PKI Infrastructure
+# =============================================================================
+# Ignore generated PKI files from EasyRSA (contains private keys)
+vpn_setup/easy-rsa-vpn/pki/
+easy-rsa-vpn/pki/
+
+# AWS Client VPN Generated Files
+# =============================================================================
+# OpenVPN client configuration files (contain embedded keys)
+*.ovpn
+*-client-config.ovpn
+CenetexVPNx0-client-config.ovpn
+
+# Downloaded/Cloned EasyRSA in VPN scripts
+vpn_setup/scripts/easy-rsa-vpn/
+vpn_setup/scripts/easy-rsa/
+
+# PKI Certificate and Key Files (Security Critical)
+# =============================================================================
+# Private keys (never commit these)
 *.key
-userlist.txt   # User credentials (do not commit)
+!*.key.example
 
-# Ignore database and log files
-data/media_store/
-*.db*
-*.log.config
+# Certificate files
+*.crt
+*.csr
+*.cert
+*.certificate
 
-# Ignore macOS system files
+# PEM format files (often contain private keys)
+*.pem
+!*.pem.example
+
+# PKCS#12 files
+*.p12
+*.pfx
+
+# Certificate Authority files
+ca.crt
+ca.key
+ca.*
+
+# Certificate serial and index files
+serial*
+index.txt*
+
+# Certificate requests and issued certificates
+reqs/
+issued/
+certs_by_serial/
+revoked/
+
+# VPN Server Configuration Files
+# =============================================================================
+# Server configuration files that may contain secrets
+server.conf
+server.ovpn
+
+# VPN log files
+vpn*.log
+openvpn*.log
+
+# AWS Credentials and Outputs
+# =============================================================================
+# AWS CLI credential files
+.aws/
+aws-credentials*
+
+# Terraform state files (if using Terraform for AWS resources)
+*.tfstate
+*.tfstate.backup
+*.tfvars
+
+# AWS resource IDs and ARNs (often contain account info)
+aws-resource-ids.txt
+resource-arns.txt
+
+# Application Runtime Data
+# =============================================================================
+# Ignore actual user data but keep templates/examples
+app_main/server/userlist.txt
+!configuration_examples/userlist.example.txt
+
+# Database Files (Runtime Data Only)
+# =============================================================================
+# Only exclude runtime database files, not distributed binaries
+synapse_server/data/*.db
+synapse_server/data/*.db-shm
+synapse_server/data/*.db-wal
+synapse_server/data/*.sqlite
+synapse_server/data/*.sqlite3
+
+# Logs & Runtime Files
+# =============================================================================
+logs/
+*.log
+*.log.*
+*.pid
+*.seed
+*.pid.lock
+
+# Operating System Files
+# =============================================================================
+# macOS
 .DS_Store
-.AppleDouble
-.LSOverride
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Icon?
 
-# Ignore editor and OS-specific files
-*.swp
-*.swo
+# Windows
+ehthumbs.db
+Thumbs.db
+[Dd]esktop.ini
+
+# Linux
 *~
-.vscode/
+
+# Development Tools & IDEs
+# =============================================================================
+# VS Code (keep some shared settings)
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# JetBrains IDEs
 .idea/
+*.iml
+*.ipr
+*.iws
 
-# Ignore shell history
-.bash_history
-.zsh_history
+# Other editors
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+.vscode-test
 
-# Ignore backup files
-*.bak
-*.tmp
+# Temporary & Cache Files
+# =============================================================================
+# Next.js cache
+.next/
+.turbo/
 
-# Add more as needed...
-easy-rsa-vpn/
-userlist.txt
-config.yml
-homeserver.yaml
+# Nuxt.js build
+.nuxt
+.output
+
+# Vite cache
+.vite
+
+# SvelteKit build
+.svelte-kit
+
+# Temporary folders
+tmp/
+temp/
+.tmp/
+.temp/
+
+# Runtime & Process Files
+# =============================================================================
+.cache/
+.parcel-cache/
+.nyc_output/
+
+# Binary Asset Management
+# =============================================================================
+# Downloaded binary assets (managed by install-binaries.sh)
+binary_assets/
+!binary_assets/manifest.json
