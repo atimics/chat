@@ -3,7 +3,7 @@ FROM node:20-alpine
 WORKDIR /app
 
 # Install build dependencies for native modules
-RUN apk add --no-cache python3 make g++ libc6-compat linux-headers
+RUN apk add --no-cache python3 make g++ libc6-compat linux-headers eudev-dev
 
 # Copy package files
 COPY package*.json ./

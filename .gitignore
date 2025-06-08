@@ -221,3 +221,4 @@ temp/
 # Downloaded binary assets (managed by install-binaries.sh)
 binary_assets/
 !binary_assets/manifest.json
+nft_auth_system/data/nft_registrations.db
